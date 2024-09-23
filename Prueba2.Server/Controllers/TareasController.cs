@@ -20,7 +20,24 @@ public class TareasController : ControllerBase
         return await _context.tareas.ToListAsync();
     }
 
-    // GET: api/Tareas/5
+    // Este método devuelve todas las tareas
+    [HttpGet("tareas")]
+    public async Task<ActionResult<IEnumerable<tareas>>> GetTodasTareas()
+    {
+        var tareas = await _context.tareas.ToListAsync();
+
+        // Opcional: Si quieres asegurarte de que las fechas están formateadas correctamente, puedes hacer esto:
+        var tareasConFechaFormato = tareas.Select(t => new
+        {
+            t.IdTarea,
+            t.Descripcion,
+            FechaRegistro = t.FechaRegistro.ToString("yyyy-MM-ddTHH:mm:ss") // Formato ISO
+        });
+
+        return Ok(tareasConFechaFormato);
+    }
+
+    // Método existente para obtener una tarea por ID
     [HttpGet("{id}")]
     public async Task<ActionResult<tareas>> GetTarea(int id)
     {
@@ -33,6 +50,7 @@ public class TareasController : ControllerBase
 
         return tarea;
     }
+
 
     // POST: api/Tareas
     [HttpPost]

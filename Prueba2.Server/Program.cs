@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("https://localhost:5173")  // Puerto donde corre tu app React
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();  // Si tu aplicación requiere autenticación o cookies
     });
 });
 

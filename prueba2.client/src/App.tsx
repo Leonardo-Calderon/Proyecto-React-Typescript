@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TareasList from './components/TareasList';
+import { getTareas } from './services/apiService'; // Importar el servicio
 
 const App: React.FC = () => {
     const [tareas, setTareas] = useState<any[]>([]);
@@ -8,11 +9,7 @@ const App: React.FC = () => {
     useEffect(() => {
         async function fetchTareas() {
             try {
-                const response = await fetch('https://localhost:7265/api/tareas');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const data = await response.json();
+                const data = await getTareas(); // Usar la función getTareas
                 setTareas(data);
             } catch (error) {
                 console.error("Error al cargar las tareas:", error);
@@ -27,7 +24,7 @@ const App: React.FC = () => {
         <div>
             <h1>Lista de Tareas</h1>
             {error && <div>{error}</div>}
-            <TareasList varTareas={tareas} />
+            <TareasList tareas={tareas} /> {/* Se pasa varTareas */}
         </div>
     );
 };
