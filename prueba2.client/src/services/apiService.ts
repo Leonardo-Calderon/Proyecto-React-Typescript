@@ -1,4 +1,5 @@
-const API_URL = "https://localhost:7265/api"; // URL del backend
+import axios from 'axios';
+const API_URL = "https://localhost:7265/api/Tareas"; // URL del backend
 
 export async function getTareas() {
     try {
@@ -48,3 +49,48 @@ export async function createTarea(tarea: { nombre: string; descripcion: string }
         throw error;
     }
 }
+
+
+export const eliminarTarea = async (idTarea: number) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${idTarea}`);
+        if (response.status === 200 || response.status === 204) {
+            console.log('Tarea eliminada exitosamente');
+            return response.data;
+        } else {
+            console.error('Error al eliminar la tarea: Estado inesperado', response.status);
+            throw new Error(`Estado inesperado: ${response.status}`);
+        }
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error('Error al eliminar la tarea:', error.response?.data || error.message);
+        } else {
+            console.error('Error inesperado:', error);
+        }
+        throw error;
+    }
+};
+
+
+export const actualizarTarea = async (idTarea: number, nuevaDescripcion) => {
+    try {
+        const response = await axios.put(`${API_URL}/${idTarea}`, { descripcion: nuevaDescripcion });
+        return response.data;
+    } catch (error) {
+        console.log(nuevaDescripcion)
+        console.error('Error al actualizar la tarea:', error);
+        throw error;
+    }
+};
+
+
+export const crearTarea = async (nuevaTarea) => {
+    try {
+        const response = await axios.post(`${API_URL}/tareas`, nuevaTarea);
+        return response.data;
+    } catch (error) {
+        console.log(nuevaTarea)
+        console.error('Error al crear la tarea:', error);
+        throw error;
+    }
+};
